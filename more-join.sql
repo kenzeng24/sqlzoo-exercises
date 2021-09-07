@@ -1,9 +1,14 @@
 
-
 /* 
-movie: id	title	yr	director	budget	gross
-actor: id	name
-casting: movieid	actorid	ord
+Author: Ken Zeng 
+Date: September 5 2021 
+
+A collection of questions from "More JOIN" section from sqlzoo 
+https://sqlzoo.net/wiki/More_JOIN_operations
+
+movie: |id|title|yr|director|budget|gross|
+actor: |id|name|
+casting: |movieid|actorid|ord|
 */ 
 
 /*
@@ -11,8 +16,8 @@ casting: movieid	actorid	ord
 */
 
 SELECT id, title
- FROM movie
- WHERE yr=1962
+FROM movie
+WHERE yr=1962
 
  /* 
  2. Give year of 'Citizen Kane'.

@@ -1,8 +1,14 @@
 
 /*
-game: id	mdate	stadium	team1	team2
-goal: matchid	teamid	player	gtime
-eteam: id	teamname	coach
+Author: Ken Zeng 
+Date: September 5 2021 
+
+A collection of questions from "JOIN" section from sqlzoo 
+https://sqlzoo.net/wiki/The_JOIN_operation
+
+game: |id|mdate|stadium|team1|team2
+goal: |matchid|teamid|player|gtime|
+eteam:|id|teamname|coach|
 */
 
 /*
@@ -10,7 +16,7 @@ example
 */ 
 
 SELECT * FROM goal 
-  WHERE player LIKE '%Bender'
+WHERE player LIKE '%Bender'
 
   /*
 1. show the matchid and player name for all goals scored by Germany. 
@@ -79,8 +85,9 @@ WHERE stadium = 'National Stadium, Warsaw';
 */ 
 
 SELECT DISTINCT player
-  FROM game JOIN goal ON matchid = id 
-    WHERE teamid != 'GER' AND (team1 = 'GER' OR team2 = 'GER')
+FROM game 
+JOIN goal ON matchid = id 
+WHERE teamid != 'GER' AND (team1 = 'GER' OR team2 = 'GER')
 
 /*
 9. Show teamname and the total number of goals scored.
@@ -130,21 +137,22 @@ GROUP BY matchid,mdate
 13. List every match with the goals scored by each team as shown. 
 */ 
 
-/* exmample */ 
+/* example */ 
 SELECT mdate,
   team1,
   CASE WHEN teamid=team1 THEN 1 ELSE 0 END score1
   FROM game JOIN goal ON matchid = id
 
+/* solution */ 
 SELECT mdate,
   	   team1,
   	   SUM(CASE 
-  	   	    WHEN teamid=team1 THEN 1 
-  	   		ELSE 0 END) as score1, 
- 	    team2, 
- 		SUM(CASE 
- 			WHEN teamid=team2 THEN 1 
- 			ELSE 0 END) as score2 
+  	   	WHEN teamid=team1 THEN 1 
+  	   	ELSE 0 END) as score1, 
+ 	     team2, 
+ 		   SUM(CASE 
+        WHEN teamid=team2 THEN 1 
+ 			  ELSE 0 END) as score2 
 FROM game 
 JOIN goal ON matchid = id
 GROUP BY mdate, matchid, team1, team2
