@@ -15,23 +15,18 @@ casting: |movieid|actorid|ord|
 1. List the films where the yr is 1962 [Show id, title] 
 */
 
-SELECT id, title
-FROM movie
-WHERE yr=1962
+SELECT id, title FROM movie WHERE yr=1962
 
  /* 
  2. Give year of 'Citizen Kane'.
  */
-SELECT yr 
-FROM movie 
-WHERE title =  'Citizen Kane';
+SELECT yr FROM movie WHERE title =  'Citizen Kane';
 
 /*
 3. List all of the Star Trek movies, include the id, title and yr (all of these movies include the words Star Trek in the title). Order results by year.
 */ 
 
-SELECT id, title, yr
-FROM movie
+SELECT id, title, yr FROM movie
 WHERE title LIKE 'Star Trek%'
 ORDER BY yr
 
@@ -39,16 +34,14 @@ ORDER BY yr
 4. What id number does the actor 'Glenn Close' have?
 */ 
 
-SELECT id 
-FROM actor 
+SELECT id FROM actor 
 WHERE name = 'Glenn Close'
 
 /* 
 5. What is the id of the film 'Casablanca'
 */
 
-SELECT id
-FROM movie 
+SELECT id FROM movie 
 WHERE title = 'Casablanca'
 
 /* 
@@ -111,17 +104,39 @@ WHERE name='Rock Hudson'
 GROUP BY yr
 HAVING COUNT(title) > 2
 
+
 /* 
 12. List the film title and the leading actor for all of the films 'Julie Andrews' played in. 
 */ 
+
+SELECT movie.title, actor.name
+FROM (
+  SELECT movieid FROM casting 
+  WHERE actorid = (
+    SELECT id FROM actor 
+    WHERE name = 'Julie Andrews')
+  ) selected_movies
+  JOIN (SELECT * FROM casting WHERE ord =1) lead_casting 
+    ON lead_casting.movieid = selected_movies.movieid
+  JOIN actor ON lead_casting.actorid = actor.id
+  JOIN movie on movie.id = selected_movies.movieid
+
 
 /* 
 13. Obtain a list, in alphabetical order, of actors who've had at least 15 starring roles.
 */ 
 
+SELECT name 
+FROM casting JOIN actor ON casting.actorid = actor.id
+WHERE ord =1  
+GROUP BY actor.name, casting.actorid
+HAVING count(casting.actorid) >= 15
+ORDER by actor.name 
+
 /* 
 14. List the films released in the year 1978 ordered by the number of actors in the cast, then by title.
 */ 
+
 
 /* 
 15. List all the people who have worked with 'Art Garfunkel'.
